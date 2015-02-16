@@ -181,6 +181,7 @@ ngx_int_t string_piece_to_buffer_chain(
       return NGX_ERROR;
     }
 
+    b->flush = 1;
     cl->buf = b;
     cl->next = NULL;
 
@@ -267,7 +268,7 @@ ngx_int_t ps_base_fetch_handler(ngx_http_request_t* r) {
   ngx_log_debug1(NGX_LOG_DEBUG_HTTP, r->connection->log, 0,
                  "ps fetch handler: %V", &r->uri);
 
-  if (ngx_terminate || ngx_exiting) {
+  if (ngx_terminate /*|| ngx_exiting*/) {
     ps_set_buffered(r, false);
     ps_release_base_fetch(ctx);
     return NGX_ERROR;

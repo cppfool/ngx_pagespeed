@@ -178,6 +178,11 @@ namespace net_instaweb {
   void NgxUrlAsyncFetcher::ShutDown() {
     shutdown_ = true;
     if (!pending_fetches_.empty()) {
+      for (Pool<NgxFetch>::iterator p = pending_fetches_.begin(),
+           e = pending_fetches_.end(); p != e; p++) {
+        NgxFetch* fetch = *p;
+        fetch->CallbackDone(false);
+      }
       pending_fetches_.DeleteAll();
     }
 

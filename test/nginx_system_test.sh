@@ -119,6 +119,10 @@ function keepalive_test() {
 
 function fire_ab_load() {
   AB_PID="0"
+
+  for i in 1; do
+    curl --silent --proxy $SECONDARY_HOSTNAME http://stress.example.com/45-seconds-html-response.php >/dev/null &
+  done
   if hash ab 2>/dev/null; then
     ab -n 10000 -k -c 100 http://$PRIMARY_HOSTNAME/ &>/dev/null & AB_PID=$!
     # Sleep to allow some queueing up of requests
